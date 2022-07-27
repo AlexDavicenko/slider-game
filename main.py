@@ -1,9 +1,6 @@
-
 import math
 import pygame
 import sys
-
-
 
 from labels import Label
 from entities import Fallings
@@ -11,10 +8,7 @@ from setup import *
 
 
 class Game():
-
     def __init__(self) -> None:
-        
-
         pygame.init()
 
         info = pygame.display.Info()
@@ -38,12 +32,12 @@ class Game():
 
         self.slider = pygame.Rect(
                 ((1920/2)-100)*self.scalex,
-                (980)*self.scaley,
+                980*self.scaley,
                 200*self.scalex,
                 50*self.scaley
                 )
+
         self.fObj = Fallings(self.x,self.y,self.scalex,self.scaley)
-        
         
         self.paused = False
         self.tp_set_up = False
@@ -102,11 +96,12 @@ class Game():
 
 
     def mainloop(self):
+        
         while True:
             self.clock.tick(60)
 
             self.eventloop()
-
+            
 
 
 
@@ -115,13 +110,7 @@ class Game():
 
             keys = pygame.key.get_pressed()
 
-            if not self.paused:
-                if keys[pygame.K_a]:
-                    if self.slider.left > 0:
-                        self.slider.x -= 16 * self.scalex
-                if keys[pygame.K_d]:
-                    if self.slider.right < self.x:
-                        self.slider.x += 16 * self.scalex 
+            
 
             
 
@@ -141,6 +130,27 @@ class Game():
            
 
             self.drawLabels()
+
+
+            if self.paused:
+                menu = pygame.rect.Rect(0,0, (self.x/4),self.y/1.5)
+                menu.center = (self.x/2, self.y/2)
+                pygame.draw.rect(self.window,MENUCOLOR, menu)
+                
+
+            else:
+                if keys[pygame.K_a]:
+                    if self.slider.left > 0:
+                        self.slider.x -= 16 * self.scalex
+                if keys[pygame.K_d]:
+                    if self.slider.right < self.x:
+                        self.slider.x += 16 * self.scalex
+
+
+
+
+
+
             pygame.display.update()
 
 
@@ -148,10 +158,8 @@ class Game():
 
 
 def main():
-
     Game().mainloop()
 
-    
 if __name__ == "__main__":
     main()
 
