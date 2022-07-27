@@ -56,6 +56,7 @@ class Game():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.paused = not self.paused
+
                 if event.key == pygame.K_e:
                     if not self.tp_set_up:
                         self.tp = pygame.Rect(self.slider.left, self.slider.top, self.slider.width, self.slider.height)
@@ -65,6 +66,40 @@ class Game():
 
 
                     self.tp_set_up = not self.tp_set_up
+
+    def drawLabels(self):
+
+        collectedColor = (255,255,255)
+        if self.fObj.recentlyCollectedTimer > 0:
+            collectedColor = (0,255,0)
+        missedColor = (255,255,255)
+        if self.fObj.recentlyEscapedTimer > 0:
+            missedColor = (255,0,0)
+
+        Label(
+            window = self.window,
+            size = 24,
+            text = f"{str(self.clock.get_fps())[:4]}",
+            color = (255,255,255),
+            x = 10*self.scalex,
+            y = 10*self.scaley)
+
+        Label(
+        window = self.window,
+        size = 24,
+        text = f"Collected: {self.fObj.collected}",
+        color = collectedColor,
+        x = (self.x-(520)*self.scalex),
+        y = 10*self.scaley)
+
+        Label(
+        window = self.window,
+        size = 24,
+        text = f"Missed: {self.fObj.missed}",
+        color = missedColor,
+        x = (self.x-(250)*self.scalex),
+        y = 10*self.scaley)
+
 
     def mainloop(self):
         while True:
@@ -82,9 +117,11 @@ class Game():
 
             if not self.paused:
                 if keys[pygame.K_a]:
-                    self.slider.x -= 16 * self.scalex
+                    if self.slider.left > 0:
+                        self.slider.x -= 16 * self.scalex
                 if keys[pygame.K_d]:
-                    self.slider.x += 16 * self.scalex 
+                    if self.slider.right < self.x:
+                        self.slider.x += 16 * self.scalex 
 
             
 
@@ -98,41 +135,9 @@ class Game():
                 pygame.draw.rect(self.window,(155,155,0), self.tp)
             pygame.draw.rect(self.window, (255,255,0), self.slider)
             
-            Label(
-                window = self.window,
-                size = 24,
-                text = f"{str(self.clock.get_fps())[:4]}",
-                color = (255,255,255),
-                x = 10*self.scalex,
-                y = 10*self.scaley)
-            
-            collectedColor = (255,255,255)
-            if self.fObj.recentlyCollectedTimer > 0:
-                collectedColor = (0,255,0)
-            missedColor = (255,255,255)
-            if self.fObj.recentlyEscapedTimer > 0:
-                missedColor = (255,0,0)
+           
 
-            Label(
-                window = self.window,
-                size = 24,
-                text = f"Collected: {self.fObj.collected}",
-                color = collectedColor,
-                x = (self.x-(520)*self.scalex),
-                y = 10*self.scaley)
-
-            
-
-            Label(
-                window = self.window,
-                size = 24,
-                text = f"Missed: {self.fObj.missed}",
-                color = missedColor,
-                x = (self.x-(250)*self.scalex),
-                y = 10*self.scaley)
-
-
-
+            self.drawLabels()
             pygame.display.update()
 
 

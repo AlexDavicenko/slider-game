@@ -38,7 +38,7 @@ class Fallings:
                 self.fallArr.remove(obj)
                 self.missed += 1
                 self.recentlyEscapedTimer = 50
-
+        
             if obj.x <= sliderObj.right and obj.x+obj.size >= sliderObj.left and obj.y+obj.size > sliderObj.top and obj.y < sliderObj.bottom:
                 self.fallArr.remove(obj)
                 self.collected += 1
