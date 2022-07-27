@@ -57,8 +57,6 @@ class Game():
                     else:
                         self.slider = pygame.Rect(self.tp.left, self.tp.top, self.tp.width, self.tp.height)
 
-
-
                     self.tp_set_up = not self.tp_set_up
 
     def drawLabels(self):
@@ -98,21 +96,17 @@ class Game():
     def mainloop(self):
         
         while True:
-            self.clock.tick(60)
+            self.clock.tick(144)
 
             self.eventloop()
             
-
-
 
             if not self.paused:
                 self.fObj.update(self.slider)  
 
             keys = pygame.key.get_pressed()
 
-            
 
-            
 
             self.window.fill((0,0,0))
 
