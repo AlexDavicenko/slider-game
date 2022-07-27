@@ -71,7 +71,7 @@ class Game():
         Label(
             window = self.window,
             size = 24,
-            text = f"{str(self.clock.get_fps())[:4]}",
+            text = f"{str(int(self.clock.get_fps()))}",
             color = WHITE,
             x = 10*self.scalex,
             y = 10*self.scaley)
@@ -96,8 +96,14 @@ class Game():
     def mainloop(self):
         
         while True:
-            self.clock.tick(144)
+            self.window.fill((0,0,0))
+            self.clock.tick(200)
 
+
+            if self.clock.get_fps() != 0:
+                self.timeF = 60/self.clock.get_fps()
+                self.fObj.timeF = self.timeF
+            
             self.eventloop()
             
 
@@ -108,13 +114,13 @@ class Game():
 
 
 
-            self.window.fill((0,0,0))
+            
 
             for obj in self.fObj.fallArr:
                 
-                dispersionFactor = 25*math.sin(obj.y/50)
-
-                pygame.draw.rect(self.window, MAGENTA, pygame.Rect(obj.x + dispersionFactor, obj.y, 64*self.scalex,64*self.scaley))
+                #dispersionFactor = 250*math.sin(obj.y/50)
+                #dispersionFactor = 25*(math.exp(math.cos(obj.y/50))-math.exp(math.sin(obj.y/50)) )
+                pygame.draw.rect(self.window, MAGENTA, pygame.Rect(obj.x , obj.y, 64*self.scalex,64*self.scaley))
                 #window.blit(pineapple,(obj.x + 25*math.sin(obj.y/50),obj.y))
 
             if self.tp_set_up:
@@ -135,10 +141,10 @@ class Game():
             else:
                 if keys[pygame.K_a]:
                     if self.slider.left > 0:
-                        self.slider.x -= 16 * self.scalex
+                        self.slider.x -= 16 * self.scalex * self.timeF
                 if keys[pygame.K_d]:
                     if self.slider.right < self.x:
-                        self.slider.x += 16 * self.scalex
+                        self.slider.x += 16 * self.scalex * self.timeF
 
 
 
