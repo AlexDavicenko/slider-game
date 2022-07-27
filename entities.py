@@ -24,10 +24,16 @@ class Fallings:
 
 
         for _ in range(self.fallAtOnce - len(self.fallArr)):
+
+
+            xpos = random.randint(int(64*self.scalex),int(self.x-(2*64)*self.scalex))
+            for obj in self.fallArr:
+                pass
+
             self.fallArr.append(FallObj(
                 delay = random.randint(0,500),
                 size = 64*self.scalex,
-                x = random.randint(int(64*self.scalex),int(self.x-(64)*self.scalex)),
+                x = xpos,
                 y = -64*self.scaley,
                 vy = 4*self.scaley,
                 ))

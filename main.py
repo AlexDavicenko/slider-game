@@ -7,7 +7,7 @@ import sys
 
 from labels import Label
 from entities import Fallings
-
+from setup import *
 
 
 class Game():
@@ -57,7 +57,7 @@ class Game():
                 if event.key == pygame.K_ESCAPE:
                     self.paused = not self.paused
 
-                if event.key == pygame.K_e:
+                if event.key == pygame.K_e and not self.paused:
                     if not self.tp_set_up:
                         self.tp = pygame.Rect(self.slider.left, self.slider.top, self.slider.width, self.slider.height)
                     else:
@@ -69,18 +69,18 @@ class Game():
 
     def drawLabels(self):
 
-        collectedColor = (255,255,255)
+        collectedColor = WHITE
         if self.fObj.recentlyCollectedTimer > 0:
-            collectedColor = (0,255,0)
-        missedColor = (255,255,255)
+            collectedColor = GREEN
+        missedColor = WHITE
         if self.fObj.recentlyEscapedTimer > 0:
-            missedColor = (255,0,0)
+            missedColor = RED
 
         Label(
             window = self.window,
             size = 24,
             text = f"{str(self.clock.get_fps())[:4]}",
-            color = (255,255,255),
+            color = WHITE,
             x = 10*self.scalex,
             y = 10*self.scaley)
 
@@ -128,12 +128,15 @@ class Game():
             self.window.fill((0,0,0))
 
             for obj in self.fObj.fallArr:
-                pygame.draw.rect(self.window, (255,0,255), pygame.Rect(obj.x + 25*math.sin(obj.y/50),obj.y, 64*self.scalex,64*self.scaley))
+                
+                dispersionFactor = 25*math.sin(obj.y/50)
+
+                pygame.draw.rect(self.window, MAGENTA, pygame.Rect(obj.x + dispersionFactor, obj.y, 64*self.scalex,64*self.scaley))
                 #window.blit(pineapple,(obj.x + 25*math.sin(obj.y/50),obj.y))
 
             if self.tp_set_up:
-                pygame.draw.rect(self.window,(155,155,0), self.tp)
-            pygame.draw.rect(self.window, (255,255,0), self.slider)
+                pygame.draw.rect(self.window,DARKYELLOW, self.tp)
+            pygame.draw.rect(self.window, YELLOW, self.slider)
             
            
 
