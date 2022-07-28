@@ -1,4 +1,5 @@
 import random
+from pygame import rect
 
 class Fallings:
     def __init__(self, x, y, scalex, scaley) -> None:
@@ -33,42 +34,47 @@ class Fallings:
                 pass
 
             self.fallArr.append(FallObj(
+                rObj = rect.Rect(
+                    xpos,
+                    -64*self.scaley, 
+                    64*self.scalex, 
+                    64*self.scaley),
                 timeF = self.timeF,
                 delay = random.randint(0,500),
-                size = 64*self.scalex,
-                x = xpos,
-                y = -64*self.scaley,
                 vy = 4*self.scaley,
-                ))
+            ))
 
-        for obj in self.fallArr:
+        for i, obj in enumerate(self.fallArr):
             obj.timeF = self.timeF
+
             obj.update()
-            if obj.y > self.y:
+
+            if obj.rObj.top > self.y:
                 self.fallArr.remove(obj)
                 self.missed += 1
                 self.recentlyEscapedTimer = 50
         
-            if obj.x <= sliderObj.right and obj.x+obj.size >= sliderObj.left and obj.y+obj.size > sliderObj.top and obj.y < sliderObj.bottom:
-                self.fallArr.remove(obj)
+            if obj.rObj.colliderect(sliderObj):
+                self.fallArr.pop(i)
                 self.collected += 1
                 self.recentlyCollectedTimer = 50
 
 
 class FallObj:
-    def __init__(self, timeF, delay, size, x, y, vy, vx = 0) -> None:
+    def __init__(self, rObj, timeF, delay, vy, vx = 0) -> None:
         self.delay = delay
-        self.size = size
-        self.x = x
-        self.y = y
+        self.rObj = rObj
         self.vx = vx
-        self.vy = vy 
+        self.vy = vy
+
+        self.y = rObj.bottom
         
         self.timeF = timeF
 
 
     def update(self):
         if self.delay <= 0:
-            self.y = self.y + self.vy *self.timeF
+            self.y += self.vy *self.timeF
+            self.rObj.bottom = self.y
         else:
             self.delay = self.delay - 1*self.timeF
